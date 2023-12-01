@@ -27,3 +27,16 @@ module.exports = { getUsers };
 
 
 const con = require('../db_connect');
+
+async function createTable() {
+    let sql = `CREATE TABLE IF NOT EXISTS users (
+        accountId INT NOT NULL AUTO_INCREMENT,
+        userName VARCHAR(50) NOT NULL,
+        password VARCHAR(50) NOT NULL,
+        email VARCHAR(50) NOT NULL,
+        CONSTRAINT user_pk PRIMARY KEY (accountId)
+    )`;
+    await con.query(sql);
+}
+
+createTable();

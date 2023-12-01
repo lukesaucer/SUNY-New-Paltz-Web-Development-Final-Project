@@ -39,3 +39,27 @@ let getPosts = () => posts;
 
 // Need to export to allow access
 module.exports = { getPosts };
+
+const con = require('../db_connect');
+
+async function createTable() {
+    let sql = `CREATE TABLE IF NOT EXISTS posts (
+        postId INT NOT NULL AUTO_INCREMENT,
+        accountId INT NOT NULL,
+        repositoryId INT NOT NULL,
+        tagId INT NOT NULL,
+        attachmentId INT NOT NULL,
+        title VARCHAR(50) NOT NULL,
+        PostContent VARCHAR(50) NOT NULL,
+        URLLinks VARCHAR(50) NOT NULL,
+        TimeStamp DATETIME NOT NULL,
+        CONSTRAINT post_pk PRIMARY KEY (postId),
+        CONSTRAINT post_fk FOREIGN KEY (accountId) REFERENCES accounts(accountId),
+        CONSTRAINT post_fk2 FOREIGN KEY (repositoryId) REFERENCES repositories(repositoryId),
+        CONSTRAINT post_fk3 FOREIGN KEY (tagId) REFERENCES tags(tagId),
+        CONSTRAINT post_fk4 FOREIGN KEY (attachmentId) REFERENCES attachments(attachmentId)
+    )`;
+    await con.query(sql);
+}
+
+createTable();
