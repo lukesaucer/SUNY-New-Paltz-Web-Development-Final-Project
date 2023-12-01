@@ -24,3 +24,6 @@ let getUsers = () => users;
 
 // Need to export to allow access
 module.exports = { getUsers };
+
+
+const con = require('../db_connect');
