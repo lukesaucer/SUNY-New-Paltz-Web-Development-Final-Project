@@ -1,5 +1,5 @@
 
-const con = require('../db_connect');
+const con = require('./db_connect');
 
 async function createTable() {
     let sql = `CREATE TABLE IF NOT EXISTS repository (
