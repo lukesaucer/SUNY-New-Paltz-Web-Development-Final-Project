@@ -37,20 +37,19 @@ module.exports = { getRepositories };
 const con = require('../db_connect');
 
 async function createTable() {
-    let sql = `CREATE TABLE IF NOT EXISTS repositories (
-        repositoryId INT NOT NULL AUTO_INCREMENT,
-        accountId INT NOT NULL,
-        postId INT NOT NULL,
-        tagId INT NOT NULL,
-        categoryId INT NOT NULL,
-        title VARCHAR(50) NOT NULL,
-        timeStamp DATETIME NOT NULL,
-        CONSTRAINT repository_pk PRIMARY KEY (repositoryId),
-        CONSTRAINT repository_fk FOREIGN KEY (accountId) REFERENCES accounts(accountId),
-        CONSTRAINT repository_fk2 FOREIGN KEY (postId) REFERENCES posts(postId),
-        CONSTRAINT repository_fk3 FOREIGN KEY (tagId) REFERENCES tags(tagId),
-        CONSTRAINT repository_fk4 FOREIGN KEY (categoryId) REFERENCES categories(categoryId)
-    )`;
+    let sql = `CREATE TABLE IF NOT EXISTS repository (
+        repository_id INTEGER NOT NULL UNIQUE AUTO_INCREMENT,
+        account_id INTEGER NOT NULL,
+        post_id INTEGER,
+        tag_id INTEGER,
+        category_id INTEGER,
+        title VARCHAR(64) NOT NULL,
+        time_stamp BLOB NOT NULL,
+        CONSTRAINT repository_pk PRIMARY KEY(repository_id),
+        CONSTRAINT account_fk_repository FOREIGN KEY(account_id) REFERENCES user(account_id),
+        CONSTRAINT post_fk_repository FOREIGN KEY(post_id) REFERENCES post(post_id),
+        CONSTRAINT tag_fk_repository FOREIGN KEY(tag_id) REFERENCES tags(tag_id),
+        )`;
     await con.query(sql);
 }
 

@@ -43,22 +43,23 @@ module.exports = { getPosts };
 const con = require('../db_connect');
 
 async function createTable() {
-    let sql = `CREATE TABLE IF NOT EXISTS posts (
-        postId INT NOT NULL AUTO_INCREMENT,
-        accountId INT NOT NULL,
-        repositoryId INT NOT NULL,
-        tagId INT NOT NULL,
-        attachmentId INT NOT NULL,
-        title VARCHAR(50) NOT NULL,
-        PostContent VARCHAR(50) NOT NULL,
-        URLLinks VARCHAR(50) NOT NULL,
-        TimeStamp DATETIME NOT NULL,
-        CONSTRAINT post_pk PRIMARY KEY (postId),
-        CONSTRAINT post_fk FOREIGN KEY (accountId) REFERENCES accounts(accountId),
-        CONSTRAINT post_fk2 FOREIGN KEY (repositoryId) REFERENCES repositories(repositoryId),
-        CONSTRAINT post_fk3 FOREIGN KEY (tagId) REFERENCES tags(tagId),
-        CONSTRAINT post_fk4 FOREIGN KEY (attachmentId) REFERENCES attachments(attachmentId)
-    )`;
+    let sql = `CREATE TABLE IF NOT EXISTS post (
+        	post_id INT NOT NULL UNIQUE AUTO_INCREMENT,
+        	account_id INT NOT NULL, 
+        	repository_id INT,
+            tag_id INT,
+        	attachment_id INT,
+        	title VARCHAR(64) NOT NULL,
+        	post_content STRING NOT NULL,
+        	url_links VARCHAR(255),
+        	time_stamp STRING NOT NULL,
+        	CONSTRAINT post_pk PRIMARY KEY(post_id),
+        	CONSTRAINT account_fk_post FOREIGN KEY(account_id) REFERENCES user(account_id),
+        	CONSTRAINT repository_fk_post FOREIGN KEY(repository_id) REFERENCES repository(repository_id),
+        	CONSTRAINT tag_fk_post FOREIGN KEY(tag_id) REFERENCES tags(tag_id),
+        	CONSTRAINT attachment_fk_post FOREIGN KEY(attachment_id) REFERENCES attachments(attachment_id),
+        )`;
+        
     await con.query(sql);
 }
 
