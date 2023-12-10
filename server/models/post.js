@@ -1,44 +1,3 @@
-const posts = [
-    {
-        postId: 1,
-        accountId: 1,
-        repositoryId: 1,
-        tagId: 1,
-        attachmentId: 1,
-        title: 'Post 1',
-        PostContent: 'Post 1 Content',
-        URLLinks: 'https://www.google.com',
-        TimeStamp: '2020-01-01 00:00:00',
-    },
-    {
-        postId: 2,
-        accountId: 2,
-        repositoryId: 2,
-        tagId: 2,
-        attachmentId: 2,
-        title: 'Post 2',
-        PostContent: 'Post 2 Content',
-        URLLinks: 'https://www.google.com',
-        TimeStamp: '2020-01-01 00:00:00',
-    },
-    {
-        postId: 3,
-        accountId: 3,
-        repositoryId: 3,
-        tagId: 3,
-        attachmentId: 3,
-        title: 'Post 3',
-        PostContent: 'Post 3 Content',
-        URLLinks: 'https://www.google.com',
-        TimeStamp: '2020-01-01 00:00:00',
-    },
-];
-
-//function to get ALL posts
-let getPosts = () => posts;
-
-// Need to export to allow access
-module.exports = { getPosts };
 
 const con = require('../db_connect');
 
@@ -64,3 +23,101 @@ async function createTable() {
 }
 
 createTable();
+
+const posts = [
+    {
+        post_id: 1,
+        account_id: 1,
+        repository_id: 1,
+        tag_id: 1,
+        attachment_id: 1,
+        title: 'Post 1',
+        post_content: 'Post 1 Content',
+        url_links: 'https://www.google.com',
+        time_stamp: '2020-01-01 00:00:00',
+    },
+    {
+        post_id: 2,
+        account_id: 2,
+        repository_id: 2,
+        tag_id: 2,
+        attachment_id: 2,
+        title: 'Post 2',
+        post_content: 'Post 2 Content',
+        url_links: 'https://www.google.com',
+        time_stamp: '2020-01-01 00:00:00',
+    },
+    {
+        post_id: 3,
+        account_id: 3,
+        repository_id: 3,
+        tag_id: 3,
+        attachment_id: 3,
+        title: 'Post 3',
+        post_content: 'Post 3 Content',
+        url_links: 'https://www.google.com',
+        time_stamp: '2020-01-01 00:00:00',
+    },
+];
+
+//function to get ALL posts
+let getPosts = () => posts;
+
+async function postExists(title) {
+    const sql = `
+        SELECT * FROM post
+        WHERE title = '${title}'
+    `;
+    let p = await con.query(sql);
+    console.log(u);
+    return p;
+}
+
+async function createPost(post) {
+    const p = postExists(post.title);
+    if (p.length > 0) throw Error("Post title already exists!")
+    const sql = `
+        INSERT INTO post (account_id, repository_id, tag_id, attachment_id, title, post_content, url_links, time_stamp)
+        VALUES ('${post.account_id}', '${post.repository_id}', '${post.tag_id}', '${post.attachment_id}', '${post.title}', '${post.post_content}', '${post.url_links}', '${post.time_stamp}'
+        )`;
+
+    await con.query(sql);
+    const newPost = await getPost(post);
+    return newPost[0];
+}
+
+async function getPost(post) {
+    let sql;
+    if (post.post_id) {
+        sql = `SELECT * FROM post
+        WHERE post_id = ${post.post_id}
+        `
+    } else {
+        sql = `SELECT * FROM post
+        WHERE title = '${post.title}'
+        `
+    }
+    return await con.query(sql);
+}
+
+async function editPost(post) {
+    const sql = `UPDATE post SET
+    title = '${post.title}'
+    WHERE post_id = ${post.post_id}
+    `;
+
+    await con.query(sql);
+    const newPost = await getPost(post);
+    return newPost[0];
+}
+
+async function deletePost(post_id) {
+    const sql = `DELETE FROM post
+    WHERE post_id = ${post_id}
+    `;
+
+    await con.query(sql);
+}
+
+// Need to export to allow access
+module.exports = { getPosts };

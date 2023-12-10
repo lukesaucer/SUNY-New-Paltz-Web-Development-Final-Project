@@ -6,7 +6,7 @@ app.use(express.json());
 
 const userRoutes = require('./server/routes/user');
 const postRoutes = require('./server/routes/post');
-const repoRoutes = require('./server/routes/repository');
+const repositoryRoutes = require('./server/routes/repository');
 //croute to at least one other entity that is NOT user/customer/etc.
 
 //CORS middleware
@@ -20,7 +20,7 @@ app.use(function(req, res, next) {
 
 app.use('/users', userRoutes);
 app.use('/posts', postRoutes);
-app.use('/repos', repoRoutes);
+app.use('/repositories', repositoryRoutes);
 // app.use for routes above
 
 const PORT = process.env.PORT || 3000;

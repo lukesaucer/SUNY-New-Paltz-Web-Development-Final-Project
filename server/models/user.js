@@ -1,31 +1,3 @@
-const users = [
-    {
-        accountId: 1,
-        userName: 'admin',
-        password: '123456',
-        email:'admin@admin.com',
-    },
-    {
-        accountId: 2,
-        userName: 'user1',
-        password: '123456',
-        email:'user1@user.com',
-    },
-    {
-        accountId: 3,
-        userName: 'user2',
-        password: '123456',
-        email:'user2@user.com',
-    },
-];
-
-//function to get ALL users
-let getUsers = () => users;
-
-// Need to export to allow access
-module.exports = { getUsers };
-
-
 const con = require('../db_connect');
 
 async function createTable() {
@@ -40,3 +12,95 @@ async function createTable() {
 }
 
 createTable();
+
+
+const users = [
+    {
+        account_id: 1,
+        username: 'admin',
+        password: '123456',
+        email:'admin@admin.com',
+    },
+    {
+        account_id: 2,
+        username: 'user1',
+        password: '123456',
+        email:'user1@user.com',
+    },
+    {
+        account_id: 3,
+        username: 'user2',
+        password: '123456',
+        email:'user2@user.com',
+    },
+];
+
+//function to get ALL users
+let getUsers = () => users;
+
+async function userExists(username) {
+    const sql = `
+        SELECT * FROM user 
+        WHERE username = '${username}'
+    `;
+    let u = await con.query(sql);
+    console.log(u);
+    return u;
+}
+
+async function register(user) {
+    const u = userExists(user.username);
+    if (u.length > 0) throw Error("Username already exists!")
+    const sql = `
+        INSERT INTO user (username, password, email)
+        VALUES ('${user.username}', '${user.password}', '${user.email}'
+        )`;
+
+    await con.query(sql);
+    const newUser = await getUser(user);
+    return newUser[0];
+}
+
+async function login(user) {
+    let cUser = await userExists(user.username);
+    if (!cUser[0]) throw Error("Username does not exist!");
+    if(cuser[0].password != user.password) throw Error("Password is incorrect!");
+
+    return cUser[0];
+}
+
+async function getUser(user) {
+    let sql;
+    if (user.account_id) {
+        sql = `SELECT * FROM user 
+        WHERE account_id = ${user.account_id}
+        `
+    } else {
+        sql = `SELECT * FROM user 
+        WHERE username = '${user.username}'
+        `
+    }
+    return await con.query(sql);
+}
+
+async function editUser(user) {
+    const sql = `UPDATE users SET
+    username = '${user.username}'
+    WHERE account_id = ${user.account_id}
+    `;
+
+    await con.query(sql);
+    const newUser = await getUser(user);
+    return newUser[0];
+}
+
+async function deleteUser(account_id) {
+    const sql = `DELETE FROM user
+    WHERE account_id = ${account_id}
+    `;
+
+    await con.query(sql);
+}
+
+// Need to export to allow access
+module.exports = { getUsers };

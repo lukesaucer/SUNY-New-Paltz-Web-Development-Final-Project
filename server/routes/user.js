@@ -2,12 +2,57 @@ const express = require('express');
 const user= require('../models/user');
 const router = express.Router();
 
-router.get('/', (req, res) => {
+router
+
+// Create a .get route for getting all users
+.get('/', (req, res) => {
     try {
         const users = user.getUsers();
         res.send(users);
     } catch (err) {
-        res.status(401).send({message: error.message});
+        res.status(401).send({message: err.message});
+    }
+})
+
+
+// Create a .post route for creating a new user
+.post('/login', async (req, res) => {
+    try {
+        let user = await user.login(req.body);
+        res.send({...user, password: undefined})
+    } catch (err) {
+        res.status(401).send({message: err.message});
+    }
+})
+
+// Create a .post route for creating a new user
+.post('/register', async (req, res) => { 
+    try {
+        const user = await user.register(req.body);
+        console.log(user);
+        res.send({...user, password: undefined})
+    } catch (err) {
+        res.status(401).send({message: err.message});
+    }
+})
+
+// Create a .put route for editing a user
+.put('/edit', async (req, res) => {
+    try {
+        const user = await user.editUser(req.body);
+        res.send({...user, password: undefined})
+    } catch (err) {
+        res.status(401).send({message: err.message});
+    }
+})
+
+// Create a .delete route for deleting a user
+.delete('/delete', async (req, res) => {
+    try {
+        user.deleteUser(req.body.account_id);
+        res.send({message: "User deleted!"});
+    } catch (err) {
+        res.status(401).send({message: err.message});
     }
 });
 
