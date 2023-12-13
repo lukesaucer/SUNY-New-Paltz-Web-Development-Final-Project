@@ -9,14 +9,15 @@ async function createTable() {
         tag_id INTEGER,
         category_id INTEGER,
         title VARCHAR(64) NOT NULL,
-        time_stamp BLOB NOT NULL,
+        time_stamp VARCHAR(128) NOT NULL,
         CONSTRAINT repository_pk PRIMARY KEY(repository_id),
         CONSTRAINT account_fk_repository FOREIGN KEY(account_id) REFERENCES user(account_id),
-        CONSTRAINT post_fk_repository FOREIGN KEY(post_id) REFERENCES post(post_id),
-        CONSTRAINT tag_fk_repository FOREIGN KEY(tag_id) REFERENCES tags(tag_id),
+        CONSTRAINT tag_fk_repository FOREIGN KEY(tag_id) REFERENCES tags(tag_id)
         )`;
     await con.query(sql);
 }
+
+    //  CONSTRAINT post_fk_repository FOREIGN KEY(post_id) REFERENCES post(post_id),
 
 createTable();
 
@@ -110,5 +111,7 @@ async function deletePost(post_id) {
     await con.query(sql);
 }
 
+
+export { getRepositories, createRepository, getRepository, editRepository, deleteRepository };
 // Need to export to allow access
-module.exports = { getRepositories };
+// module.exports = { getRepositories };

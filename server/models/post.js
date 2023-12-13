@@ -1,5 +1,7 @@
 
 const con = require('./db_connect');
+const userTable = require('./user');
+const repositoryTable = require('./repository');
 
 async function createTable() {
     let sql = `CREATE TABLE IF NOT EXISTS post (
@@ -9,19 +11,22 @@ async function createTable() {
             tag_id INT,
         	attachment_id INT,
         	title VARCHAR(64) NOT NULL,
-        	post_content STRING NOT NULL,
+        	post_content VARCHAR(32768) NOT NULL,
         	url_links VARCHAR(255),
-        	time_stamp STRING NOT NULL,
+        	time_stamp VARCHAR(128) NOT NULL,
         	CONSTRAINT post_pk PRIMARY KEY(post_id),
         	CONSTRAINT account_fk_post FOREIGN KEY(account_id) REFERENCES user(account_id),
-        	CONSTRAINT repository_fk_post FOREIGN KEY(repository_id) REFERENCES repository(repository_id),
-        	CONSTRAINT tag_fk_post FOREIGN KEY(tag_id) REFERENCES tags(tag_id),
-        	CONSTRAINT attachment_fk_post FOREIGN KEY(attachment_id) REFERENCES attachments(attachment_id),
+        	CONSTRAINT repository_fk_post FOREIGN KEY(repository_id) REFERENCES repository(repository_id)
         )`;
+
+        // CONSTRAINT tag_fk_post FOREIGN KEY(tag_id) REFERENCES tags(tag_id),
+        // CONSTRAINT attachment_fk_post FOREIGN KEY(attachment_id) REFERENCES attachments(attachment_id)
         
     await con.query(sql);
 }
 
+userTable.createTable();
+repositoryTable.createTable();
 createTable();
 
 const posts = [
@@ -100,6 +105,14 @@ async function getPost(post) {
     return await con.query(sql);
 }
 
+async function getAllPosts(post) {
+    let sql = `SELECT * FROM post
+      WHERE account_id = ${post.account_id}
+    `
+   
+    return await con.query(sql);
+}
+
 async function editPost(post) {
     const sql = `UPDATE post SET
     title = '${post.title}'
@@ -120,4 +133,4 @@ async function deletePost(post_id) {
 }
 
 // Need to export to allow access
-module.exports = { getPosts };
+module.exports = { getPosts, createPost, getPost, getAllPosts, editPost, deletePost };

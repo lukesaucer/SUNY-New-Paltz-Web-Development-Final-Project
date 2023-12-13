@@ -64,7 +64,7 @@ async function register(user) {
 async function login(user) {
     let cUser = await userExists(user.username);
     if (!cUser[0]) throw Error("Username does not exist!");
-    if(cuser[0].password != user.password) throw Error("Password is incorrect!");
+    if(cUser[0].password != user.password) throw Error("Password is incorrect!");
 
     return cUser[0];
 }
@@ -101,6 +101,36 @@ async function deleteUser(account_id) {
 
     await con.query(sql);
 }
+
+
+
+
+
+// Start of code from Module 10 to finish the project.
+
+
+async function fetchData(route = '', data = {}, methodType){
+    const response = await fetch(`http://localhost:3000${route}`, {
+        method: methodType, // *GET, POST, PUT, DELETE, etc.
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+    if(response.ok) {
+        return await response.json();
+    } else {
+        throw await response.json();
+    }
+}
+
+export { fetchData, deleteUser, editUser, getUser, login, register, userExists };
+
+
+
+
+
+
 
 // Need to export to allow access
 module.exports = { getUsers };

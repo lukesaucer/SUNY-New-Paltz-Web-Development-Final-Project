@@ -14,6 +14,16 @@ router
     }
 })
 
+// added another route to get all posts
+.post('/allPosts', (req, res) => {
+    try {
+        const posts = post.getAllPosts(req.body);
+        res.send(posts);
+    } catch (err) {
+        res.status(401).send({message: error.message});
+    }
+})
+
 // Create a .post route for creating a new post
 .post('/create', async (req, res) => {
     try {

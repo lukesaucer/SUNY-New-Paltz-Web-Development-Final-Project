@@ -1,6 +1,48 @@
+import { fetchData } from './models/user.js';
+
 let form = document.getElementById("regForm");
 form.addEventListener("submit", addUser);
 
+function register(event){
+  event.preventDefault(); // prevent the form from submitting normally
+
+  let user = {
+    username: document.getElementById("username").value,
+    password: document.getElementById("password").value,
+    email: document.getElementById("email").value
+  }
+
+  fetchData('/users/register', user, 'POST')
+  .then(data => {
+    if(!data.message) {
+      setCurrentUser(data)
+      window.location.href = 'index.html'
+    }
+  })
+  .catch(err => {
+    let errorSection = document.querySelector("#loginForm .error");
+    errorSection.innerText= err.message
+  })
+}
+
+function setCurrentUser(user) {
+  localStorage.setItem('user', JSON.stringify(user));
+}
+
+function getCurrentUser() {
+  return JSON.parse(localStorage.getItem('user'));
+}
+
+function removeCurrentUser() {
+  localStorage.removeItem('user');
+}
+
+
+
+
+// Start of code from previous javascript assignment.
+
+/*
 function addUser(event){
   // code to handle form submission goes here
     event.preventDefault(); // prevent the form from submitting normally
@@ -14,7 +56,7 @@ function addUser(event){
         userPassword: password,
         userEmail: email
       }
-    
+    */
     
     
     
@@ -30,5 +72,4 @@ function addUser(event){
     // registerList.appendChild(list);
     // console.log(register);
 
-    return user;
-};
+     //return user;
