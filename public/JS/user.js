@@ -1,10 +1,10 @@
-import { fetchData } from './models/user.js';
+import { fetchData, setCurrentUser } from './main.js';
 
 let form = document.getElementById("regForm");
 form.addEventListener("submit", addUser);
 
-function register(event){
-  event.preventDefault(); // prevent the form from submitting normally
+function register(e) {
+  e.preventDefault()
 
   let user = {
     username: document.getElementById("username").value,
@@ -12,29 +12,22 @@ function register(event){
     email: document.getElementById("email").value
   }
 
-  fetchData('/users/register', user, 'POST')
+  fetchData("/users/register", user, "POST")
   .then(data => {
     if(!data.message) {
       setCurrentUser(data)
-      window.location.href = 'index.html'
+      window.location.href = "profile.html"
     }
   })
   .catch(err => {
-    let errorSection = document.querySelector("#loginForm .error");
-    errorSection.innerText= err.message
+    console.log(err)
+    let errorSection = document.querySelector("#register-form .error")
+    errorSection.innerText = err.message
+    document.getElementById("username").value = ""
+    document.getElementById("email").value = ""
+    document.getElementById("password").value = ""
   })
-}
-
-function setCurrentUser(user) {
-  localStorage.setItem('user', JSON.stringify(user));
-}
-
-function getCurrentUser() {
-  return JSON.parse(localStorage.getItem('user'));
-}
-
-function removeCurrentUser() {
-  localStorage.removeItem('user');
+  
 }
 
 

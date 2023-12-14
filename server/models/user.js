@@ -105,10 +105,7 @@ async function deleteUser(account_id) {
 
 
 
-
-// Start of code from Module 10 to finish the project.
-
-
+/*
 async function fetchData(route = '', data = {}, methodType){
     const response = await fetch(`http://localhost:3000${route}`, {
         method: methodType, // *GET, POST, PUT, DELETE, etc.
@@ -123,8 +120,9 @@ async function fetchData(route = '', data = {}, methodType){
         throw await response.json();
     }
 }
+*/
 
-export { fetchData, deleteUser, editUser, getUser, login, register, userExists };
+export { deleteUser, editUser, getUser, getUsers, login, register, userExists };
 
 
 
@@ -133,4 +131,4 @@ export { fetchData, deleteUser, editUser, getUser, login, register, userExists }
 
 
 // Need to export to allow access
-module.exports = { getUsers };
+// module.exports = { getUsers };

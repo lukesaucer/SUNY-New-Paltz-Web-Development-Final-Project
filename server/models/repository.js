@@ -112,6 +112,6 @@ async function deletePost(post_id) {
 }
 
 
-export { getRepositories, createRepository, getRepository, editRepository, deleteRepository };
+export { getRepositories, createRepository, getRepository, editRepository, deletePost };
 // Need to export to allow access
 // module.exports = { getRepositories };
