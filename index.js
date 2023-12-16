@@ -9,8 +9,6 @@ const postRoutes = require('./server/routes/post');
 const repositoryRoutes = require('./server/routes/repository');
 //croute to at least one other entity that is NOT user/customer/etc.
 
-
-
 //CORS middleware
 
 app.use(function(req, res, next) {

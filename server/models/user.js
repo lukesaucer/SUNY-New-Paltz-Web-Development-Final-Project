@@ -122,7 +122,7 @@ async function fetchData(route = '', data = {}, methodType){
 }
 */
 
-export { deleteUser, editUser, getUser, getUsers, login, register, userExists };
+module.exports = { deleteUser, editUser, getUser, getUsers, login, register, userExists, createTable };
 
 
 
